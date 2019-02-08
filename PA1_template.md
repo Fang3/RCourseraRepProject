@@ -60,7 +60,7 @@ with(avgsteps,plot(interval,steps,type='l',ylab='Daily Average Steps',xlab='5 Mi
 max_int <- avgsteps[which.max(avgsteps$steps),'interval']
 ```
 
-The 5-minutes interval which contains the maximum number of steps, on average across all the days in the datasetis: 835.
+The 5-minutes interval which contains the maximum number of steps, on average across all the days in the dataset is: 835.
 
 ## Imputing missing values
 
