@@ -1,10 +1,5 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: html_document
-keep_md: true
----
 
-
+### title: "Reproducible Research: Peer Assessment 1"
 
 ## Loading and preprocessing the data
 
@@ -45,7 +40,7 @@ totalsteps <- tapply(activity$steps,as.Date(activity$date),sum,na.rm=T)
 hist(totalsteps,breaks=50,main='Total numbers of steps taken per day',xlab='Total Steps',ylab='Number of Days',col='cadetblue3')
 ```
 
-![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
+![plot of chunk unnamed-chunk-2](unnamed-chunk-2-1.png)
 
 The mean total number of steps per day is: 9,354.23.
 
@@ -59,7 +54,7 @@ colnames(avgsteps) <- c('interval','steps')
 with(avgsteps,plot(interval,steps,type='l',ylab='Daily Average Steps',xlab='5 Minutes Interval',main='Average Daily Activity Pattern'))
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
+![plot of chunk unnamed-chunk-3](unnamed-chunk-3-1.png)
 
 ```r
 max_int <- avgsteps[which.max(avgsteps$steps),'interval']
@@ -84,7 +79,7 @@ totalsteps2 <- tapply(activity2$steps,as.Date(activity2$date),sum)
 hist(totalsteps2,breaks=50,main='Total numbers of steps taken per day',xlab='Total Steps',ylab='Number of Days',col='cadetblue3')
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
+![plot of chunk unnamed-chunk-5](unnamed-chunk-5-1.png)
 
 After imputing missing values with mean, the mean total number of steps per day is: 10,766.19.
 
@@ -105,6 +100,6 @@ g <- ggplot(avgsteps2,aes(interval,steps))
 g + geom_line() + labs(x="5-minute Interval",y="Avarage Number of Steps") + facet_grid(wday~.)
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![plot of chunk unnamed-chunk-6](unnamed-chunk-6-1.png)
 
 Looking at the plot for activity pattern between weekdays and weekneds, we can see that the activity is lower during weekends.
