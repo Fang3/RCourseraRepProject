@@ -1,0 +1,75 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: html_document
+keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading and preprocessing the data
+
+Load the activity data and take a look at first 6 records and check data attributes.
+
+```{r}
+activity <- read.csv('activity.csv')
+head(activity)
+str(activity)
+```
+
+## What is mean total number of steps taken per day?
+
+```{r}
+totalsteps <- tapply(activity$steps,as.Date(activity$date),sum,na.rm=T)
+hist(totalsteps,breaks=50,main='Total numbers of steps taken per day',xlab='Total Steps',ylab='Number of Days',col='cadetblue3')
+```
+
+The mean total number of steps per day is: `r prettyNum(mean(totalsteps),big.mark = ',')`.
+
+The median total number of steps per day is: `r prettyNum(median(totalsteps),big.mark = ',')`.
+
+## What is the average daily activity pattern?
+```{r}
+avgsteps <- aggregate(activity$steps~activity$interval,FUN = mean,na.rm=T)
+colnames(avgsteps) <- c('interval','steps')
+with(avgsteps,plot(interval,steps,type='l',ylab='Daily Average Steps',xlab='5 Minutes Interval',main='Average Daily Activity Pattern'))
+max_int <- avgsteps[which.max(avgsteps$steps),'interval']
+```
+
+The 5-minutes interval which contains the maximum number of steps, on average across all the days in the datasetis: `r max_int`.
+
+## Imputing missing values
+
+There are `r sum(is.na(activity$steps))` missing values in the dataset. We are imputing missing values with the mean. Below histogram shows the total number of steps taken each day after we imputing missing values.
+
+```{r message=FALSE}
+library(Hmisc)
+library(ggplot2)
+```
+```{r}
+activity2 <- activity
+activity2$steps <- impute(activity$steps, fun=mean)
+totalsteps2 <- tapply(activity2$steps,as.Date(activity2$date),sum)
+hist(totalsteps2,breaks=50,main='Total numbers of steps taken per day',xlab='Total Steps',ylab='Number of Days',col='cadetblue3')
+```
+
+After imputing missing values with mean, the mean total number of steps per day is: `r prettyNum(mean(totalsteps2),big.mark = ',')`.
+
+After imputing missing values with mean, the median total number of steps per day is: `r prettyNum(median(totalsteps2),big.mark = ',')`.
+
+The values are higher than what we reported before. 
+
+## Are there differences in activity patterns between weekdays and weekends?
+
+```{r}
+activity2$date <- as.Date(activity2$date)
+activity2$wday<- ifelse(weekdays(activity2$date) %in% c('Saturday','Sunday'),'Weekend','Weekday')
+avgsteps2 <- aggregate(activity2$steps~activity2$interval + activity2$wday,FUN = mean)
+colnames(avgsteps2) <- c('interval','wday','steps')
+
+g <- ggplot(avgsteps2,aes(interval,steps))
+g + geom_line() + labs(x="5-minute Interval",y="Avarage Number of Steps") + facet_grid(wday~.)
+```
+
+Looking at the plot for activity pattern between weekdays and weekneds, we can see that the activity is lower during weekends.
